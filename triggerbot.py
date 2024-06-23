@@ -7,8 +7,7 @@ import keyboard
 # Takes initial screenshot and finds dimensions
 screenshot = ImageGrab.grab()
 width, height = screenshot.size
-print(width, height)
-center = [width / 2 + 30, height / 2 + 20]
+center = [width / 2 + 30, height / 2 + 20] # Right shoulder is yellow? Also helps with left-right flicking
 
 # Edit depending on offset from center
 offset = 10
@@ -19,8 +18,9 @@ region = (left, top, right, bottom)
 # Activates VALORANT window
 try:
     gw.getWindowsWithTitle('VALORANT')[0]
+    pass
 except:
-    print(f'Open the VALORANT application before running this project.')
+    print('Open the VALORANT application before running this project.')
 
 win = gw.getWindowsWithTitle('VALORANT')[0]
 win.minimize()
