@@ -35,7 +35,6 @@ try:
         frame = camera.get_latest_frame()
 
         if frame is None:
-            print('Failed to capture frame')
             continue
 
         try:
