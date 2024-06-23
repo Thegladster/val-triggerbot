@@ -1,0 +1,4 @@
+dxcam==0.0.5
+keyboard==0.13.5
+Pillow==10.3.0
+PyGetWindow==0.0.9
