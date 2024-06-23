@@ -22,3 +22,10 @@ cd C:\Users\%username%\Downloads\val-triggerbot-main\val-triggerbot-main
 pip install -r requirements.txt
 python triggerbot.py
 ```
+
+For future uses after initialization, run the following command:
+
+```bash
+cd C:\Users\%username%\Downloads\val-triggerbot-main\val-triggerbot-main
+python triggerbot.py
+```
