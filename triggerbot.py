@@ -16,7 +16,13 @@ left, top, right, bottom = (center[0] - offset, center[1] - offset, center[0] + 
 left, top, right, bottom = int(left), int(top), int(right), int(bottom)
 region = (left, top, right, bottom)
 
-# Activates VALORANT window0
+# Activates VALORANT window
+try:
+    gw.getWindowsWithTitle('VALORANT')[0]
+except Exception as e:
+    print(f'Open the VALORANT application before running this project.')
+    print(f'Error: "{e}"')
+
 win = gw.getWindowsWithTitle('VALORANT')[0]
 win.minimize()
 win.maximize()
@@ -31,13 +37,13 @@ try:
         frame = camera.get_latest_frame()
 
         if frame is None:
-            print("Failed to capture frame")
+            print('Failed to capture frame')
             continue
 
         try:
             img = Image.fromarray(frame)
         except Exception as e:
-            print(f"Error converting frame to image: {e}")
+            print(f'Error converting frame to image: {e}')
             continue
 
         found = False
