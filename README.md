@@ -15,7 +15,7 @@ A project by [**Thegladster**](https://github.com/Thegladster).
 
 <h3>Usage</h3>
 
-Run following command:
+Run following command in command prompt:
 
 ```bash
 cd C:\Users\%username%\Downloads\val-triggerbot-main\val-triggerbot-main
