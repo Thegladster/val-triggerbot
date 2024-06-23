@@ -19,9 +19,8 @@ region = (left, top, right, bottom)
 # Activates VALORANT window
 try:
     gw.getWindowsWithTitle('VALORANT')[0]
-except Exception as e:
+except:
     print(f'Open the VALORANT application before running this project.')
-    print(f'Error: "{e}"')
 
 win = gw.getWindowsWithTitle('VALORANT')[0]
 win.minimize()
@@ -30,7 +29,7 @@ time.sleep(1)
 
 # Screenshot initialization
 camera = dxcam.create()
-camera.start(region=region, target_fps=120)
+camera.start(region=region, target_fps=120) # Do not set over 160 FPS
 
 try:
     while not keyboard.is_pressed('p'):
@@ -53,6 +52,8 @@ try:
 
                 if pixel_rgb[0] > 230 and pixel_rgb[1] > 230 and pixel_rgb[2] < 100:
                     if not keyboard.is_pressed('w') and not keyboard.is_pressed('a') and not keyboard.is_pressed('s') and not keyboard.is_pressed('d'):
+                        
+                        # Crouch spray (can edit depending on use)
                         keyboard.press('0')
                         keyboard.press('ctrl')
                         time.sleep(0.25)
@@ -60,6 +61,7 @@ try:
                         keyboard.release('ctrl')
                         time.sleep(0.5)
                         found = True
+                        
                         break
                 if found:
                     break
