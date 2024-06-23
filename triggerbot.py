@@ -7,7 +7,7 @@ import keyboard
 # Takes initial screenshot and finds dimensions
 screenshot = ImageGrab.grab()
 width, height = screenshot.size
-center = [width / 2 + 30, height / 2 + 20] # Right shoulder is yellow? Also helps with left-right flicking
+center = [width / 2 + 30, height / 2 + 20] #  Offset helps with left-right flicking
 
 # Edit depending on offset from center
 offset = 10
@@ -18,7 +18,6 @@ region = (left, top, right, bottom)
 # Activates VALORANT window
 try:
     gw.getWindowsWithTitle('VALORANT')[0]
-    pass
 except:
     print('Open the VALORANT application before running this project.')
 
@@ -29,10 +28,10 @@ time.sleep(1)
 
 # Screenshot initialization
 camera = dxcam.create()
-camera.start(region=region, target_fps=120) # Do not set over 160 FPS
+camera.start(region=region, target_fps=90) # Do not set over 160 FPS
 
 try:
-    while not keyboard.is_pressed('p'):
+    while not keyboard.is_pressed('9'):
         frame = camera.get_latest_frame()
 
         if frame is None:
@@ -56,7 +55,7 @@ try:
                         # Crouch spray (can edit depending on use)
                         keyboard.press('0')
                         keyboard.press('ctrl')
-                        time.sleep(0.25)
+                        time.sleep(0.3)
                         keyboard.release('0')
                         keyboard.release('ctrl')
                         time.sleep(0.5)
