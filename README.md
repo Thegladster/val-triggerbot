@@ -18,7 +18,7 @@ A project by [**Thegladster**](https://github.com/Thegladster).
 Run following command:
 
 ```bash
-cd C:\Users\%username%\Downloads\val-triggerbot-main\val-triggerbot-main\triggerbot.py
+cd C:\Users\%username%\Downloads\val-triggerbot-main\val-triggerbot-main
 pip install requirements.txt
 python triggerbot.py
 ```
