@@ -29,3 +29,7 @@ For future uses after initialization, run the following command:
 cd C:\Users\%username%\Downloads\val-triggerbot-main\val-triggerbot-main
 python triggerbot.py
 ```
+
+<h3>Halting the code</h3>
+
+Simply hold down the `9` key on your keyboard. (Make sure not to type this number in chat)
