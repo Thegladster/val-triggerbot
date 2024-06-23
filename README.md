@@ -1,6 +1,6 @@
 <div align="center">
   
-<h1>🎯Val Triggerbot🎯</h1>
+<h1>🎯Valorant Triggerbot🎯</h1>
 
 This project was developed for Windows OS only.
 A project by [**Thegladster**](https://github.com/Thegladster).
