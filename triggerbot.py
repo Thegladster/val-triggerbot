@@ -3,68 +3,70 @@ from PIL import Image, ImageGrab
 import pygetwindow as gw
 import time
 import keyboard
+import sys
+
 
 # Takes initial screenshot and finds dimensions
 screenshot = ImageGrab.grab()
 width, height = screenshot.size
-center = [width / 2 + 30, height / 2 + 20] #  Offset helps with left-right flicking
+center = [width / 2, height / 2]
 
 # Edit depending on offset from center
-offset = 10
+offset = 25
 left, top, right, bottom = (center[0] - offset, center[1] - offset, center[0] + offset, center[1] + offset)
 left, top, right, bottom = int(left), int(top), int(right), int(bottom)
 region = (left, top, right, bottom)
 
 # Activates VALORANT window
 try:
-    gw.getWindowsWithTitle('VALORANT')[0]
-except:
-    print('Open the VALORANT application before running this project.')
+    win = gw.getWindowsWithTitle('VALORANT')[0]
 
-win = gw.getWindowsWithTitle('VALORANT')[0]
-win.minimize()
-win.maximize()
-time.sleep(1)
+    if win == gw.getWindowsWithTitle('valorant-triggerbot-v3')[0]:
+        win = gw.getWindowsWithTitle('VALORANT')[1]
 
-# Screenshot initialization
-camera = dxcam.create()
-camera.start(region=region, target_fps=90) # Do not set over 160 FPS
+except Exception as e:
+    print(f'Error: {e}. Open the VALORANT application before running this project.')
+    sys.exit()
 
-try:
-    while not keyboard.is_pressed('9'):
-        frame = camera.get_latest_frame()
+win.restore()
+time.sleep(0.5)
 
-        if frame is None:
-            continue
+# Camera initialization and FPS init
+camera = dxcam.create(device_idx=0, output_idx=0, output_color='RGB')
+a, start = 1, time.time()
 
-        try:
-            img = Image.fromarray(frame)
-        except Exception as e:
-            print(f'Error converting frame to image: {e}')
-            continue
+# Checks if yellow is within the nxn square around the crosshair
+while not keyboard.is_pressed('9'):
 
-        found = False
-        for i in range(offset * 2):
-            for j in range(offset * 2):
-                pixel_rgb = img.getpixel((i, j))
+    found = 0
+    frame = camera.grab(region=region)
 
-                if pixel_rgb[0] > 230 and pixel_rgb[1] > 230 and pixel_rgb[2] < 100:
-                    if not keyboard.is_pressed('w') and not keyboard.is_pressed('a') and not keyboard.is_pressed('s') and not keyboard.is_pressed('d'):
-                        
-                        # Crouch spray (can edit depending on use)
-                        keyboard.press('0')
-                        keyboard.press('ctrl')
-                        time.sleep(0.3)
-                        keyboard.release('0')
-                        keyboard.release('ctrl')
-                        time.sleep(0.5)
-                        found = True
-                        
-                        break
-                if found:
-                    break
-            if found:
-                break
-finally:
-    camera.stop()
-    print("Camera stopped.")
+    # Checks if frame is NoneType (i.e. no changes since last grab)
+    if frame is None:
+        continue
+
+    try:
+        frame = Image.fromarray(frame)
+    except Exception as e:
+        print(f'Error {e}.')
+        continue
+
+    for i in range(offset * 2):
+        for j in range(offset * 2):
+
+            rgb = frame.getpixel((i, j))
+
+            if rgb[0] > 240 and rgb[1] > 240 and rgb[2] < 100:
+                if not keyboard.is_pressed('w') and not keyboard.is_pressed('a') and not keyboard.is_pressed('s') and not keyboard.is_pressed('d'):
+                    keyboard.press_and_release('0')
+                    found = 1
+
+        a += 1
+
+        if found:
+            time.sleep(0.5)
+            break
+
+end = time.time()
+FPS = (a / (end - start))
+print(f'Average FPS: {round(FPS)}')
