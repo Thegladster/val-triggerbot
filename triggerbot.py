@@ -1,72 +1,75 @@
 import dxcam
-from PIL import Image, ImageGrab
-import pygetwindow as gw
-import time
 import keyboard
-import sys
+import numpy as np
+from PIL import ImageGrab
+import time
 
 
-# Takes initial screenshot and finds dimensions
-screenshot = ImageGrab.grab()
-width, height = screenshot.size
-center = [width / 2, height / 2]
+class Head:
+    def __init__(self, xmin, ymin, xmax, ymax):
+        self.width = xmax - xmin
+        self.height = ymax - ymin
+        self.xcenter = xmin + (self.width / 2)
+        self.ycenter = ymin + (self.height / 2)
 
-# Edit depending on offset from center
-offset = 25
-left, top, right, bottom = (center[0] - offset, center[1] - offset, center[0] + offset, center[1] + offset)
+
+def check_for_yellow(screenshot):
+    yellow = (
+            (screenshot[:, :, 0] >= lower_yellow[0]) & (screenshot[:, :, 0] <= upper_yellow[0]) &
+            (screenshot[:, :, 1] >= lower_yellow[1]) & (screenshot[:, :, 1] <= upper_yellow[1]) &
+            (screenshot[:, :, 2] >= lower_yellow[2]) & (screenshot[:, :, 2] <= upper_yellow[2])
+    )
+
+    return np.column_stack(np.where(yellow))
+
+
+# Initializing color bounds for yellow
+lower_yellow = np.array([200, 200, 0])
+upper_yellow = np.array([255, 255, 200])
+
+# Grabbing image through screenshot to find size of monitor
+shot = ImageGrab.grab()
+w, h = shot.size
+center = [w / 2, h / 2]
+
+# Change variables depending on the size of the screenshot you want to be taken
+width = 500
+height = 10
+
+# Sets image in the center with given width and height
+left, top, right, bottom = center[0] - width / 2, center[1] - (height / 2), center[0] + width / 2, center[1] + (height / 2)
 left, top, right, bottom = int(left), int(top), int(right), int(bottom)
 region = (left, top, right, bottom)
+print(region)
 
-# Activates VALORANT window
-try:
-    win = gw.getWindowsWithTitle('VALORANT')[0]
+# Initializes DirectX camera
+camera = dxcam.create(device_idx=0, output_idx=0, region=region)
+camera.start(target_fps=120)
 
-    if win == gw.getWindowsWithTitle('valorant-triggerbot-v3')[0]:
-        win = gw.getWindowsWithTitle('VALORANT')[1]
-
-except Exception as e:
-    print(f'Error: {e}. Open the VALORANT application before running this project.')
-    sys.exit()
-
-win.restore()
-time.sleep(0.5)
-
-# Camera initialization and FPS init
-camera = dxcam.create(device_idx=0, output_idx=0, output_color='RGB')
-a, start = 1, time.time()
-
-# Checks if yellow is within the nxn square around the crosshair
 while not keyboard.is_pressed('9'):
+    frame = camera.get_latest_frame()
 
-    found = 0
-    frame = camera.grab(region=region)
+    # Finds all yellow points
+    coordinates = check_for_yellow(frame)
 
-    # Checks if frame is NoneType (i.e. no changes since last grab)
-    if frame is None:
-        continue
+    # Given that there is yellow, finds maxes and mins
+    if len(coordinates) > 0:
+        min_y, min_x = np.min(coordinates, axis=0)
+        max_y, max_x = np.max(coordinates, axis=0)
 
-    try:
-        frame = Image.fromarray(frame)
-    except Exception as e:
-        print(f'Error {e}.')
-        continue
+        # Sometimes the yellow on enemy head is only on one side or there are multiple enemies
+        if max_x - min_x < 10 or max_x - min_x > 150:
+            head = Head(min_x, min_y, min_x + 30, min_y + 30)
+            x_distance, y_distance = abs(head.xcenter - width / 2), abs(head.ycenter - height / 2)
+        else:
+            head = Head(min_x, min_y, max_x, max_y)
+            x_distance, y_distance = abs(head.xcenter - width / 2), abs(head.ycenter - height / 2)
 
-    for i in range(offset * 2):
-        for j in range(offset * 2):
+        # Checks if crosshair is on head
+        if x_distance < (head.width / 2) and y_distance < head.height / 2:
+            keyboard.press_and_release('0')
+            time.sleep(0.25)
 
-            rgb = frame.getpixel((i, j))
 
-            if rgb[0] > 240 and rgb[1] > 240 and rgb[2] < 100:
-                if not keyboard.is_pressed('w') and not keyboard.is_pressed('a') and not keyboard.is_pressed('s') and not keyboard.is_pressed('d'):
-                    keyboard.press_and_release('0')
-                    found = 1
-
-        a += 1
-
-        if found:
-            time.sleep(0.5)
-            break
-
-end = time.time()
-FPS = (a / (end - start))
-print(f'Average FPS: {round(FPS)}')
+print('Process over.')
+camera.stop()
