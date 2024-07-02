@@ -31,6 +31,7 @@ python triggerbot.py
 ```
 
 <h3>Using the bot</h3>
+
 1. Upon running, you will have to select the gun you are going to use with the bot in order for the bot to spray depending on accuracy.
 
 Simply type the gun in **all lowercase** with no extra spaces.
