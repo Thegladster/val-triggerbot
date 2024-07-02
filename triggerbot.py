@@ -3,8 +3,6 @@ import keyboard
 import numpy as np
 from PIL import ImageGrab
 import time
-import sys
-
 class Head:
     def __init__(self, xmin, ymin, xmax, ymax):
         self.width = xmax - xmin
