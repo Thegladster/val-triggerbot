@@ -26,9 +26,7 @@ def check_for_yellow(screenshot):
 
 def select():
     global interval, loop, delay, rounds
-    
-    try:
-        win = gw.getWindowsWithTitle('Command Prompt')[0]
+    win = gw.getWindowsWithTitle('Command Prompt')[0]
         
     menu_select = input('Choose what gun you are using (all lowercase), or type "exit" to exit this program. ')
 
