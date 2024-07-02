@@ -35,7 +35,7 @@ def select():
     menu_select = input('Choose what gun you are using (all lowercase), or type "exit" to exit this program. ')
 
     except Exception as e:
-        print({e})
+        print(e)
 
     if menu_select == 'exit':
         loop = False
