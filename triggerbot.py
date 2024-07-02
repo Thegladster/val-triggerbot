@@ -117,6 +117,7 @@ def select():
     else:
         print('Not a valid statement.')
         select()
+        continue
 
     if not menu_select == 'exit':
         print(f'Using gun {menu_select}.')
