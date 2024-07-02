@@ -163,8 +163,8 @@ while loop:
         # Sometimes the yellow on enemy head is only on one side or there are multiple enemies
         if max_x - min_x < 10 or max_x - min_x > 150:
 
-            # Just assumes that the head is 30 pixels by 30 pixels
-            head = Head(min_x, min_y, min_x + 30, min_y + 30)
+            # Just assumes that the head is somewhere in range
+            head = Head(min_x - 30, min_y - 30, min_x + 30, min_y + 30)
             x_distance, y_distance = abs(head.xcenter - width / 2), abs(head.ycenter - height / 2)
         else:
             head = Head(min_x, min_y, max_x, max_y)
@@ -172,11 +172,12 @@ while loop:
 
         # Checks if crosshair is on head
         if x_distance < (head.width / 2) and y_distance < (head.height / 2):
-            for i in range(interval):
-                keyboard.press_and_release('0')
-                time.sleep(delay)
+            if not keyboard.is_pressed('a') or not keyboard.is_pressed('d'):
+                for i in range(interval):
+                    keyboard.press_and_release('0')
+                    time.sleep(delay)
 
-            time.sleep(0.5)
+                time.sleep(0.5)
 
 
 print('Triggerbot completed.')
