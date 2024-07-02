@@ -30,6 +30,10 @@ cd C:\Users\%username%\Downloads\val-triggerbot-main\val-triggerbot-main
 python triggerbot.py
 ```
 
-<h3>Halting the code</h3>
+Upon running, you will have to select the gun you are going to use with the bot in order for the bot to spray depending on accuracy.
 
-Simply hold down the `9` key on your keyboard. (Make sure not to type this number in chat)
+Simply type the gun in **all lowercase** with no extra spaces.
+
+> Note that just for the Operator, you can just type `op`.
+
+If the gun changes later on (which it most likely will), or you would like to exit the program, type `ctrl + p` on your computer.
