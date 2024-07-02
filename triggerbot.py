@@ -30,7 +30,7 @@ def select():
         win = gw.getWindowsWithTitle('Command Prompt')[0]
     
         win.activate()
-        win.restore()
+        win.maximize()
         
         time.sleep(0.5)
         
@@ -155,7 +155,7 @@ camera.start(target_fps=144, video_mode=True)
 
 while loop:
 
-    if keyboard.is_pressed('alt+p'):
+    if keyboard.is_pressed('ctrl+shift+9'):
         select()
 
     frame = camera.get_latest_frame()
