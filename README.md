@@ -40,4 +40,4 @@ Simply type the gun in **all lowercase** with no extra spaces.
 
 > Note that just for the Operator, you can just type `op`.
 
-2. If the gun changes later on (which it most likely will), or you would like to exit the program, just type `alt + p` on your computer and open command prompt.
+2. If the gun changes later on (which it most likely will), or you would like to exit the program, open command prompt and type `alt + p`.
