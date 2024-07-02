@@ -171,13 +171,13 @@ while loop:
             x_distance, y_distance = abs(head.xcenter - width / 2), abs(head.ycenter - height / 2)
 
         # Checks if crosshair is on head
-        if x_distance < (head.width / 2) and y_distance < (head.height / 2):
-            if not keyboard.is_pressed('a') or not keyboard.is_pressed('d'):
+        if not keyboard.is_pressed('w') or not keyboard.is_pressed('a') or not keyboard.is_pressed('s') or not keyboard.is_pressed('d'):
+            if x_distance < (head.width / 2) and y_distance < (head.height / 2):
                 for i in range(interval):
                     keyboard.press_and_release('0')
                     time.sleep(delay)
 
-                time.sleep(0.5)
+                time.sleep(0.3)
 
 
 print('Triggerbot completed.')
