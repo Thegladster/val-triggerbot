@@ -3,7 +3,7 @@ import keyboard
 import numpy as np
 from PIL import ImageGrab
 import time
-
+import pygetwindow as gw
 
 class Head:
     def __init__(self, xmin, ymin, xmax, ymax):
@@ -25,6 +25,15 @@ def check_for_yellow(screenshot):
 
 def select():
     global interval, loop, delay, rounds, ads
+
+    try:
+        win = gw.getWindowsWithTitle('Command Prompt')[0]
+
+        win.minimize()
+        win.maximize()
+
+    except Exception as e:
+        print({e})
 
     menu_select = input('Choose what gun you are using (all lowercase), or type "exit" to exit this program. ')
     ads = 0
