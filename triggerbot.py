@@ -155,7 +155,7 @@ camera.start(target_fps=144, video_mode=True)
 
 while loop:
 
-    if keyboard.is_pressed('ctrl+p'):
+    if keyboard.is_pressed('alt+p'):
         select()
 
     frame = camera.get_latest_frame()
