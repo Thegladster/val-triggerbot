@@ -7,7 +7,7 @@ A project by [**Thegladster**](https://github.com/Thegladster).
 
 <div align="left">
   
-<h3>Quickstart</h3>
+<h3>Prerequisites</h3>
 
 1. Make sure enemy color setting is set to deuteranopia.
 
