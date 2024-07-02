@@ -29,7 +29,7 @@ def select():
     menu_select = input('Choose what gun you are using (all lowercase), or type "exit" to exit this program. ')
     ads = 0
 
-    if menu_select == 'exit' or menu_select == '9exit':
+    if menu_select == 'exit':
         loop = False
 
     elif menu_select == 'classic':
@@ -167,7 +167,7 @@ while loop:
             x_distance, y_distance = abs(head.xcenter - width / 2), abs(head.ycenter - height / 2)
 
         # Checks if crosshair is on head
-        if x_distance < (head.width / 2) and y_distance < (head.height / 2):    
+        if x_distance < (head.width / 2) and y_distance < (head.height / 2):
             for i in range(interval):
                 keyboard.press_and_release('0')
                 time.sleep(delay)
