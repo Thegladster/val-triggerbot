@@ -13,6 +13,8 @@ A project by [**Thegladster**](https://github.com/Thegladster).
 
 2. Additionally, keybind the 'Fire' button to the button '0'. If that number is already in use, edit the keybind in `triggerbot.py`. However, it cannot be just the conventional mouse click (Vanguard prevents it).
 
+3. For faster screen recording, it is **recommended** (but not necessary) to set all settings to low, and to set FPS to a maximum of 120-144 (Generally, this is aligned with the refresh rate of your monitor). Unlimited FPS will greatly drain the bot's resources and memory.
+
 <h3>Usage</h3>
 
 1. Download ZIP, extract all, and run following command in Command Prompt (no changes need to be made as long as the folder is saved in Downloads):
