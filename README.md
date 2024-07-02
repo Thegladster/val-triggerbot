@@ -15,7 +15,7 @@ A project by [**Thegladster**](https://github.com/Thegladster).
 
 <h3>Usage</h3>
 
-Run following command in Command Prompt:
+Download ZIP, extract all, and run following command in Command Prompt (no changes need to be made as long as the folder is saved in `Downloads`:
 
 ```bash
 cd C:\Users\%username%\Downloads\val-triggerbot-main\val-triggerbot-main
