@@ -4,6 +4,7 @@ import numpy as np
 from PIL import ImageGrab
 import time
 import pygetwindow as gw
+import subprocess
 
 class Head:
     def __init__(self, xmin, ymin, xmax, ymax):
@@ -28,15 +29,7 @@ def select():
     
     try:
         win = gw.getWindowsWithTitle('Command Prompt')[0]
-    
-        win.activate()
-        win.maximize()
         
-        time.sleep(0.5)
-        
-    except Exception as e:
-        print(e)
-
     menu_select = input('Choose what gun you are using (all lowercase), or type "exit" to exit this program. ')
 
     if menu_select == 'exit':
@@ -121,6 +114,8 @@ def select():
 
     if not menu_select == 'exit':
         print(f'Using gun {menu_select}.')
+        win.minimize()
+        
     delay = (interval / rounds) / interval
 
 
@@ -153,11 +148,9 @@ select()
 # Initializes DirectX camera (FPS should not exceed 160)
 camera = dxcam.create(device_idx=0, output_idx=0, region=region)
 camera.start(target_fps=144, video_mode=True)
+keyboard.add_hotkey('alt+p', select)
 
 while loop:
-
-    if keyboard.is_pressed('ctrl+shift+9'):
-        select()
 
     frame = camera.get_latest_frame()
 
