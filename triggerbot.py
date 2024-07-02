@@ -117,6 +117,8 @@ def select():
         print('Not a valid statement.')
         select()
 
+    if not menu_select == 'exit':
+        print(f'Using gun {menu_select}.')
     delay = (interval / rounds) / interval
 
 
