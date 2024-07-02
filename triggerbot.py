@@ -30,9 +30,10 @@ def select():
         win = gw.getWindowsWithTitle('Command Prompt')[0]
     
         win.activate()
-        time.sleep(0.1)
         win.restore()
-
+        
+        time.sleep(0.5)
+        
     except Exception as e:
         print(e)
 
