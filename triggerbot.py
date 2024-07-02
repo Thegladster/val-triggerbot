@@ -3,6 +3,8 @@ import keyboard
 import numpy as np
 from PIL import ImageGrab
 import time
+
+
 class Head:
     def __init__(self, xmin, ymin, xmax, ymax):
         self.width = xmax - xmin
@@ -22,9 +24,10 @@ def check_for_yellow(screenshot):
 
 
 def select():
-    global interval, loop, delay, rounds
+    global interval, loop, delay, rounds, ads
 
     menu_select = input('Choose what gun you are using (all lowercase), or type "exit" to exit this program. ')
+    ads = 0
 
     if menu_select == 'exit' or menu_select == '9exit':
         loop = False
@@ -89,7 +92,7 @@ def select():
         interval = 2
         rounds = 2.75
 
-    elif menu_select == 'operator':
+    elif menu_select == 'operator' or menu_select == 'op':
         interval = 1
         rounds = 0.6
 
@@ -106,6 +109,7 @@ def select():
         select()
 
     delay = (interval / rounds) / interval
+
 
 # Initializing color bounds for yellow
 lower_yellow = np.array([230, 230, 0])
@@ -126,7 +130,11 @@ left, top, right, bottom = int(left), int(top), int(right), int(bottom)
 region = (left, top, right, bottom)
 print(region)
 
+# Simple initialization in case of undefined vars later on
 loop = True
+interval = 1
+delay = 0
+
 select()
 
 # Initializes DirectX camera (FPS should not exceed 160)
@@ -159,7 +167,7 @@ while loop:
             x_distance, y_distance = abs(head.xcenter - width / 2), abs(head.ycenter - height / 2)
 
         # Checks if crosshair is on head
-        if x_distance < (head.width / 2) and y_distance < (head.height / 2):
+        if x_distance < (head.width / 2) and y_distance < (head.height / 2):    
             for i in range(interval):
                 keyboard.press_and_release('0')
                 time.sleep(delay)
