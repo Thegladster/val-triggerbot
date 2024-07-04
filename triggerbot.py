@@ -4,7 +4,6 @@ import numpy as np
 from PIL import ImageGrab
 import time
 import pygetwindow as gw
-import subprocess
 
 class Head:
     def __init__(self, xmin, ymin, xmax, ymax):
@@ -26,7 +25,17 @@ def check_for_yellow(screenshot):
 
 def select():
     global interval, loop, delay, rounds
-    win = gw.getWindowsWithTitle('Command Prompt')[0]
+    
+    try:
+        win = gw.getWindowsWithTitle('VALORANT')[0]
+        
+        if win.isMinimized:
+            pass
+        else:
+            win.minimize()
+  
+    except Exception as e:
+        print(e)
         
     menu_select = input('Choose what gun you are using (all lowercase), or type "exit" to exit this program. ')
 
@@ -46,7 +55,7 @@ def select():
         rounds = 10
 
     elif menu_select == 'ghost':
-        interval = 5
+        interval = 1
         rounds = 6.75
 
     elif menu_select == 'sheriff':
@@ -74,7 +83,7 @@ def select():
         rounds = 10
 
     elif menu_select == 'guardian':
-        interval = 3
+        interval = 2
         rounds = 5.25
 
     elif menu_select == 'phantom':
@@ -82,7 +91,7 @@ def select():
         rounds = 11
 
     elif menu_select == 'vandal':
-        interval = 3
+        interval = 2
         rounds = 9.75
 
     elif menu_select == 'marshal':
@@ -112,7 +121,15 @@ def select():
 
     if not menu_select == 'exit':
         print(f'Using gun {menu_select}.')
-        win.minimize()
+    
+    try:
+        if win.isMaximixed:
+            pass
+        else:
+            win.activate()
+            win.maximize()
+    except:
+        pass
         
     delay = (interval / rounds) / interval
 
