@@ -1,4 +1,4 @@
-import dxcam
+import bettercam
 import time
 from PIL import ImageGrab
 import numpy as np
@@ -115,7 +115,7 @@ region = (left, top, right, bottom)
 print(region)
 
 # Camera initialization
-camera = dxcam.create(device_idx=0, output_idx=0, region=region)
+camera = bettercam.create(device_idx=0, output_idx=0, region=region)
 keyboard.add_hotkey('alt+p', select)
 
 # Select menu for gun
@@ -156,7 +156,7 @@ while loop:
                 keyboard.press_and_release('0')
                 time.sleep(delay)
 
-            time.sleep((delay * interval) / 1.5)
+            time.sleep(delay * interval)
             continue
 
 print('Program exited.')
