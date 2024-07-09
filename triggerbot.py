@@ -1,19 +1,34 @@
 import dxcam
-import keyboard
-import numpy as np
-from PIL import ImageGrab
 import time
+from PIL import ImageGrab
+import numpy as np
 import pygetwindow as gw
+import keyboard
+
 
 class Head:
-    def __init__(self, xmin, ymin, xmax, ymax):
-        self.width = xmax - xmin
-        self.height = ymax - ymin
+    def __init__(self, xmin, xmax, ymax):
+
+        # In the case that only half the head or multiple enemies are in frame
+        if xmax - xmin > 150 or xmax - xmin < 10:
+            self.width = 30
+        else:
+            self.width = xmax - xmin
+
+        self.height = self.width
         self.xcenter = xmin + (self.width / 2)
-        self.ycenter = ymin + (self.height / 2)
+        self.ycenter = ymax - (self.height / 2)
+
+    def __str__(self):
+        return f'x: {self.xcenter}, y: {self.ycenter}, w: {self.width}, h: {self.height}'
 
 
 def check_for_yellow(screenshot):
+
+    # Initializing color bounds for yellow
+    lower_yellow = np.array([230, 230, 0])
+    upper_yellow = np.array([255, 255, 100])
+
     yellow = (
             (screenshot[:, :, 0] >= lower_yellow[0]) & (screenshot[:, :, 0] <= upper_yellow[0]) &
             (screenshot[:, :, 1] >= lower_yellow[1]) & (screenshot[:, :, 1] <= upper_yellow[1]) &
@@ -24,119 +39,65 @@ def check_for_yellow(screenshot):
 
 
 def select():
-    global interval, loop, delay, rounds
-    
+    global interval, loop, delay, f, start
+
+    end = time.perf_counter() - start
+
+    # FPS reporter
+    fps = f / end
+    print(f'FPS: {fps}')
+
     try:
         win = gw.getWindowsWithTitle('VALORANT')[0]
-        
+
         if win.isMinimized:
             pass
         else:
             win.minimize()
-  
+
     except Exception as e:
-        print(e)
-        
+        win = 0
+        print(f'Open the VALORANT window before starting this project. Error {e}.')
+        pass
+
     menu_select = input('Choose what gun you are using (all lowercase), or type "exit" to exit this program. ')
 
     if menu_select == 'exit':
-        loop = False
+        loop = 0
+        return
 
-    elif menu_select == 'classic':
-        interval = 3
-        rounds = 6.75
+    guns_list = ['classic', 'shorty', 'frenzy', 'ghost', 'sheriff', 'stinger', 'spectre', 'bucky', 'judge', 'bulldog',
+                 'guardian', 'phantom', 'vandal', 'marshal', 'outlaw', 'op', 'operator', 'ares', 'odin']
+    intervals_list = [3, 1, 4, 1, 1, 5, 5, 1, 1, 3, 2, 3, 2, 1, 2, 1, 1, 4, 12]
+    rounds_list = [6.75, 3.33, 10, 6.75, 4, 16, 13.33, 1.1, 3.5, 10, 5.25, 11, 9.75, 1.5, 2.75, 0.6, 0.6, 13, 12]
 
-    elif menu_select == 'shorty':
-        interval = 1
-        rounds = 3.33
+    if menu_select in guns_list:
+        index = guns_list.index(menu_select)
+        interval = intervals_list[index]
+        rounds = rounds_list[index]
 
-    elif menu_select == 'frenzy':
-        interval = 4
-        rounds = 10
+        print(f'Using gun {menu_select}.')
 
-    elif menu_select == 'ghost':
-        interval = 1
-        rounds = 6.75
+        delay = (interval / rounds) / interval
 
-    elif menu_select == 'sheriff':
-        interval = 1
-        rounds = 4
+        win.restore()
+        win.maximize()
 
-    elif menu_select == 'stinger':
-        interval = 5
-        rounds = 16
-
-    elif menu_select == 'spectre':
-        interval = 5
-        rounds = 13.33
-
-    elif menu_select == 'bucky':
-        interval = 1
-        rounds = 1.1
-
-    elif menu_select == 'judge':
-        interval = 1
-        rounds = 3.5
-
-    elif menu_select == 'bulldog':
-        interval = 3
-        rounds = 10
-
-    elif menu_select == 'guardian':
-        interval = 2
-        rounds = 5.25
-
-    elif menu_select == 'phantom':
-        interval = 4
-        rounds = 11
-
-    elif menu_select == 'vandal':
-        interval = 2
-        rounds = 9.75
-
-    elif menu_select == 'marshal':
-        interval = 1
-        rounds = 1.5
-
-    elif menu_select == 'outlaw':
-        interval = 2
-        rounds = 2.75
-
-    elif menu_select == 'operator' or menu_select == 'op':
-        interval = 1
-        rounds = 0.6
-
-    elif menu_select == 'ares':
-        interval = 4
-        rounds = 13
-
-    elif menu_select == 'odin':
-        interval = 12
-        rounds = 12
+        # FPS reset
+        f = 0
+        start = time.perf_counter()
 
     else:
         print('Not a valid statement.')
         select()
         return
 
-    if not menu_select == 'exit':
-        print(f'Using gun {menu_select}.')
-    
-    try:
-        if win.isMaximixed:
-            pass
-        else:
-            win.activate()
-            win.maximize()
-    except:
-        pass
-        
-    delay = (interval / rounds) / interval
 
-
-# Initializing color bounds for yellow
-lower_yellow = np.array([230, 230, 0])
-upper_yellow = np.array([255, 255, 100])
+# First variable initialization
+loop = 1
+interval = 1
+delay = 0
+f = 0
 
 # Grabbing image through screenshot to find size of monitor
 shot = ImageGrab.grab()
@@ -144,58 +105,58 @@ w, h = shot.size
 center = [w / 2, h / 2]
 
 # Change variables depending on the size of the screenshot you want to be taken
-width = 250
-height = 10
+width = 500
+height = 15
 
 # Sets image in the center with given width and height
-left, top, right, bottom = center[0] - width / 2, center[1] - (height / 2), center[0] + width / 2, center[1] + (height / 2)
+left, top, right, bottom = center[0] - width/2, center[1] - (height/2), center[0] + width/2, center[1] + (height/2)
 left, top, right, bottom = int(left), int(top), int(right), int(bottom)
 region = (left, top, right, bottom)
 print(region)
 
-# Simple initialization in case of undefined vars later on
-loop = True
-interval = 1
-delay = 0
-
-select()
-
-# Initializes DirectX camera (FPS should not exceed 160)
+# Camera initialization
 camera = dxcam.create(device_idx=0, output_idx=0, region=region)
-camera.start(target_fps=144, video_mode=True)
 keyboard.add_hotkey('alt+p', select)
+
+# Select menu for gun
+start = 0
+select()
 
 while loop:
 
-    frame = camera.get_latest_frame()
+    # Frame 1
+    frame = camera.grab()
+
+    if frame is None:
+        continue
+
+    # FPS reporter
+    f += 1
 
     # Finds all yellow points
     coordinates = check_for_yellow(frame)
 
-    # Given that there is yellow, finds maxes and minimums
+    # Given that there is yellow, finds distance
     if len(coordinates) > 0:
         min_y, min_x = np.min(coordinates, axis=0)
         max_y, max_x = np.max(coordinates, axis=0)
 
-        # Sometimes the yellow on enemy head is only on one side or there are multiple enemies
-        if max_x - min_x < 10 or max_x - min_x > 150:
+        head = Head(min_x, max_x, max_y)
 
-            # Just assumes that the head is somewhere in range
-            head = Head(min_x - 30, min_y - 30, min_x + 30, min_y + 30)
-            x_distance, y_distance = abs(head.xcenter - width / 2), abs(head.ycenter - height / 2)
-        else:
-            head = Head(min_x, min_y, max_x, max_y)
-            x_distance, y_distance = abs(head.xcenter - width / 2), abs(head.ycenter - height / 2)
+        # Finds distance from crosshair
+        a = head.xcenter - width / 2
+        b = head.ycenter - height / 2
 
-        # Checks if crosshair is on head
-        if not keyboard.is_pressed('w') or not keyboard.is_pressed('a') or not keyboard.is_pressed('s') or not keyboard.is_pressed('d'):
-            if x_distance < (head.width / 2) and y_distance < (head.height / 2):
-                for i in range(interval):
-                    keyboard.press_and_release('0')
-                    time.sleep(delay)
+        # Pythagorean theorem came in clutch for once
+        c = (a ** 2 + b ** 2) ** 0.5
+        max_dist = abs(head.width / 2)
 
-                time.sleep(0.3)
+        if c <= max_dist:
+            for i in range(interval):
+                keyboard.press_and_release('0')
+                time.sleep(delay)
 
+            time.sleep((delay * interval) / 1.5)
+            continue
 
-print('Triggerbot completed.')
-camera.stop()
+print('Program exited.')
