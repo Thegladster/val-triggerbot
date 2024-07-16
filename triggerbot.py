@@ -1,27 +1,28 @@
 import bettercam
+import keyboard
+import pygetwindow as gw
+from colorama import init as colorama_init, Fore
+import numpy as np
 import time
 from PIL import ImageGrab
-import numpy as np
-import pygetwindow as gw
-import keyboard
 
 
-class Head:
-    def __init__(self, xmin, xmax, ymax):
+class Enemy:
+    def __init__(self, xmin, xmax, ymin, ymax):
 
-        # In the case that only half the head or multiple enemies are in frame
-        if xmax - xmin > 150 or xmax - xmin < 10:
-            self.width = 30
-        else:
-            self.width = xmax - xmin
+        self.head_width = xmax - xmin
+        self.head_height = self.head_width * 1.5
+        self.head_xcenter = xmin + (self.head_width / 2)
+        self.head_ycenter = ymin + (self.head_height / 2)
+        self.body_width = self.head_width * 2
+        self.body_height = ymax - ymin + self.head_height
+        self.body_xcenter = self.head_xcenter
+        self.body_ycenter = ymin + self.head_height + (self.body_height / 2)
 
-        self.height = self.width
-        self.xcenter = xmin + (self.width / 2)
-        self.ycenter = ymax - (self.height / 2)
 
     def __str__(self):
-        return f'x: {self.xcenter}, y: {self.ycenter}, w: {self.width}, h: {self.height}'
-
+        return (f'Head: x: {self.head_xcenter}, y: {self.head_ycenter}, w: {self.head_width}, h: {self.head_height}, '
+                f'Body: x: {self.body_xcenter}, y: {self.body_ycenter}, w: {self.body_width}, h: {self.body_height}')
 
 def check_for_yellow(screenshot):
 
@@ -39,124 +40,146 @@ def check_for_yellow(screenshot):
 
 
 def select():
-    global interval, loop, delay, f, start
+    global camera, select_uses, loop, start, fps, delay, interval
 
-    end = time.perf_counter() - start
-
-    # FPS reporter
-    fps = f / end
-    print(f'FPS: {fps}')
-
+    if select_uses == 0:
+        print(f'{Fore.LIGHTYELLOW_EX}[i] Welcome. Press {Fore.LIGHTWHITE_EX}alt + p{Fore.LIGHTYELLOW_EX} '
+              f'to return to this menu once in-game to {Fore.MAGENTA}change gun or check FPS.{Fore.RESET}')
+        print('')
+    elif select_uses == 1:
+        print(Fore.LIGHTYELLOW_EX)
+        print(f'[i] FPS: {int(fps / (time.perf_counter() - start))}{Fore.RESET}')
+        print(Fore.LIGHTCYAN_EX)
+        print('[?] FPS seem slow (less than 80)? Refer to the GitHub repository: '
+              'https://github.com/Thegladster/val-triggerbot')
+    else:
+        print(Fore.LIGHTYELLOW_EX)
+        print(f'[i] FPS: {int(fps / (time.perf_counter() - start))}{Fore.RESET}')
     try:
         win = gw.getWindowsWithTitle('VALORANT')[0]
 
-        if win.isMinimized:
-            pass
-        else:
+        if not win.isMinimized:
             win.minimize()
 
     except Exception as e:
-        win = 0
-        print(f'Open the VALORANT window before starting this project. Error {e}.')
-        pass
+        print(f'{Fore.RED}Error {e}: Make sure the VALORANT application is open prior to use.')
+        print('')
+        win = None
 
-    menu_select = input('Choose what gun you are using (all lowercase), or type "exit" to exit this program. ')
+    gun_dict = {
+        'classic': [2, 0, 6.75],
+        'shorty': [1, 0, 3.33],
+        'frenzy': [3, 0, 10],
+        'ghost': [2, 0, 6.75],
+        'sheriff': [1, 0.1, 4],
+        'stinger': [3, 0, 16],
+        'spectre': [3, 0, 13.33],
+        'bucky': [1, 0, 1.1],
+        'judge': [1, 0, 3.5],
+        'bulldog': [2, 0, 10],
+        'guardian': [2, 0, 5.25],
+        'phantom': [2, 0, 11],
+        'vandal': [2, 0, 9.75],
+        'marshal': [1, 0, 1.5],
+        'outlaw': [1, 0, 2.75],
+        'op': [1, 0, 0.6],
+        'operator': [1, 0, 0.6],
+        'ares':  [3, 0, 13],
+        'odin': [3, 0, 12]
+    }
 
-    if menu_select == 'exit':
+    gun_select = input(f'{Fore.LIGHTGREEN_EX}Enter which gun you are using here in \033[4mall lowercase:\033[0m ')
+
+    if gun_select in gun_dict:
+        print(f'{Fore.LIGHTYELLOW_EX}[i] Using {Fore.LIGHTGREEN_EX}{gun_select}{Fore.LIGHTYELLOW_EX}.{Fore.RESET}')
+        select_uses += 1
+        start = time.perf_counter()
+        fps = 0
+
+        win.maximize()
+        (interval, extra_delay, delay) = gun_dict[gun_select]
+        delay = (1 / delay) + extra_delay
+        return
+
+    elif gun_select == 'exit':
         loop = 0
         return
 
-    guns_list = ['classic', 'shorty', 'frenzy', 'ghost', 'sheriff', 'stinger', 'spectre', 'bucky', 'judge', 'bulldog',
-                 'guardian', 'phantom', 'vandal', 'marshal', 'outlaw', 'op', 'operator', 'ares', 'odin']
-    intervals_list = [3, 1, 4, 1, 1, 5, 5, 1, 1, 3, 2, 3, 2, 1, 2, 1, 1, 4, 12]
-    rounds_list = [6.75, 3.33, 10, 6.75, 4, 16, 13.33, 1.1, 3.5, 10, 5.25, 11, 9.75, 1.5, 2.75, 0.6, 0.6, 13, 12]
-
-    if menu_select in guns_list:
-        index = guns_list.index(menu_select)
-        interval = intervals_list[index]
-        rounds = rounds_list[index]
-
-        print(f'Using gun {menu_select}.')
-
-        delay = (interval / rounds) / interval
-
-        win.restore()
-        win.maximize()
-
-        # FPS reset
-        f = 0
-        start = time.perf_counter()
-
-    else:
-        print('Not a valid statement.')
-        select()
-        return
+    print(Fore.RED)
+    print('⚠ Not a valid gun.')
+    print(Fore.RESET)
+    select()
 
 
-# First variable initialization
+# Necessary initializations
+colorama_init()
+select_uses = 0
 loop = 1
+fps = 0
+start = time.perf_counter()
 interval = 1
-delay = 0
-f = 0
+delay = 0.1
 
-# Grabbing image through screenshot to find size of monitor
+# Region initialization
 shot = ImageGrab.grab()
 w, h = shot.size
-center = [w / 2, h / 2]
+center = (w / 2, h / 2)
 
 # Change variables depending on the size of the screenshot you want to be taken
-width = 500
-height = 15
+width = 75
+height = 200
 
 # Sets image in the center with given width and height
-left, top, right, bottom = center[0] - width/2, center[1] - (height/2), center[0] + width/2, center[1] + (height/2)
+left, top, right, bottom = center[0] - width / 2, center[1] - height / 2, center[0] + width / 2, center[1] + height / 2
 left, top, right, bottom = int(left), int(top), int(right), int(bottom)
 region = (left, top, right, bottom)
 print(region)
 
-# Camera initialization
-camera = bettercam.create(device_idx=0, output_idx=0, region=region)
-keyboard.add_hotkey('alt+p', select)
 
-# Select menu for gun
-start = 0
+# Select menu (yes, I know the text is clunky but at least it looks cool)
 select()
 
-while loop:
+camera = bettercam.create(output_idx=0, device_idx=0, region=region)
+keyboard.add_hotkey('alt+p', select)
 
-    # Frame 1
+while loop:
     frame = camera.grab()
 
     if frame is None:
         continue
 
-    # FPS reporter
-    f += 1
+    # FPS counter adjustment
+    fps += 1
 
     # Finds all yellow points
     coordinates = check_for_yellow(frame)
 
-    # Given that there is yellow, finds distance
     if len(coordinates) > 0:
-        min_y, min_x = np.min(coordinates, axis=0)
-        max_y, max_x = np.max(coordinates, axis=0)
+        min_y = np.min(coordinates[:, 0])
+        max_y = np.max(coordinates[:, 0])
 
-        head = Head(min_x, max_x, max_y)
+        # Creates a subset of points that rest below the head but above the torso
+        subset = coordinates[coordinates[:, 0] < (min_y + 15)]
+        x_values = subset[:, 1]
 
-        # Finds distance from crosshair
-        a = head.xcenter - width / 2
-        b = head.ycenter - height / 2
+        # Finds the max and min x of these head values
+        max_x = np.max(x_values)
+        min_x = np.min(x_values)
 
-        # Pythagorean theorem came in clutch for once
-        c = (a ** 2 + b ** 2) ** 0.5
-        max_dist = abs(head.width / 2)
+        enemy = Enemy(min_x, max_x, min_y, max_y)
 
-        if c <= max_dist:
+        if abs(enemy.head_xcenter - width / 2) < enemy.head_width / 2 and abs(enemy.head_ycenter - height / 2) < enemy.head_height / 2:
             for i in range(interval):
                 keyboard.press_and_release('0')
                 time.sleep(delay)
 
-            time.sleep(delay * interval)
-            continue
+            time.sleep(delay)
 
-print('Program exited.')
+        if abs(enemy.body_xcenter - width / 2) < enemy.body_width / 2 and abs(enemy.body_ycenter - height / 2) < enemy.body_height / 2:
+            for i in range(interval + 1):
+                keyboard.press_and_release('0')
+                time.sleep(delay)
+
+            time.sleep(delay)
+            
+print('Thanks for stopping by!')
