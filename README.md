@@ -57,6 +57,7 @@ Simply type the gun in **all lowercase** with no extra spaces.
 
 <summary><b>FPS Troubleshooting</b></summary>
 
+
 The reported FPS should be at or around the game's client FPS, which should consequently be at or around your monitor's [**refresh rate.**](https://support.microsoft.com/en-us/windows/change-the-refresh-rate-on-your-monitor-in-windows-c8ea729e-0678-015c-c415-f806f04aae5a)
 
 If your game FPS is significantly higher than the reported FPS from the triggerbot, there can be many different possibilities:
