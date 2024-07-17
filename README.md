@@ -6,18 +6,23 @@ This project was developed for Windows OS only.
 A project by [**Thegladster**](https://github.com/Thegladster).
 
 <div align="left">
+<details open>
   
-<h3>Prerequisites</h3>
+<summary><b>Prerequisites</b></summary>
 
-1. Make sure enemy color setting is set to deuteranopia.
+<h4>1.</h4>
+Make sure enemy color setting is set to deuteranopia.
 
-2. Additionally, keybind the 'Fire' button to the button '0'. If that number is already in use, edit the keybind in `triggerbot.py`. However, it cannot be just the conventional mouse click (Vanguard prevents it).
+<h4>2.</h4>
+Additionally, keybind the 'Fire' button to the button '0'. If that number is already in use, edit the keybind in `triggerbot.py`. However, it cannot be just the conventional mouse click (Vanguard prevents it).
 
-3. For faster screen recording, it is **recommended** (but not necessary) to set all settings to low, and to set FPS to a maximum of 120-144 (Generally, this is aligned with the refresh rate of your monitor). Unlimited FPS will greatly drain the bot's resources and memory.
+<h4>3.</h4>
+For faster screen recording, it is **recommended** (but not necessary) to set all settings to low, and to set FPS to a maximum of 120-144 (Generally, this is aligned with the refresh rate of your monitor). Unlimited FPS will greatly drain the bot's resources and memory.
 
-<h3>Usage</h3>
+<summary><b>Usage</b></summary>
 
-1. Download ZIP, extract all, and run following command in Command Prompt (no changes need to be made as long as the folder is saved in Downloads):
+<h4>1.</h4>
+Download ZIP, extract all, and run following command in Command Prompt (no changes need to be made as long as the folder is saved in Downloads):
 
 ```bash
 cd C:\Users\%username%\Downloads\val-triggerbot-main\val-triggerbot-main
@@ -25,19 +30,43 @@ pip install -r requirements.txt
 python triggerbot.py
 ```
 
-2. For future uses after initialization, run the following command:
+<h4>2.</h4>
+For future uses after initialization, run the following command:
 
 ```bash
 cd C:\Users\%username%\Downloads\val-triggerbot-main\val-triggerbot-main
 python triggerbot.py
 ```
 
-<h3>Using the bot</h3>
+</details>
+<details>
 
-1. Upon running, you will have to select the gun you are going to use with the bot in order for the bot to spray depending on accuracy.
+<summary><b>Menu Selection</b></summary>
+
+<h4>1.</h4>
+Upon running, you will have to select the gun you are going to use with the bot in order for the bot to spray depending on accuracy.
 
 Simply type the gun in **all lowercase** with no extra spaces.
 
 > Note that just for the Operator, you can just type `op`.
 
-2. If the gun changes later on (which it most likely will), or you would like to exit the program, open command prompt and type `alt + p`.
+2. If the gun changes later on (which it most likely will), or you would like to exit the program, open command prompt and type `alt + p`. If you would like to exit, simply type `exit`.
+
+</details>
+<details>
+
+<summary><b>FPS Troubleshooting</b></summary>
+
+The reported FPS should be at or around the game's client FPS, which should consequently be at or around your monitor's [**refresh rate.**](https://support.microsoft.com/en-us/windows/change-the-refresh-rate-on-your-monitor-in-windows-c8ea729e-0678-015c-c415-f806f04aae5a)
+
+If your game FPS is significantly higher than the reported FPS from the triggerbot, there can be many different possibilities:
+
+<h4>1. VALORANT is utilizing too many resources</h4>
+If your PC is barely running VALORANT at 120 FPS, then it is almost impossible for it to run the triggerbot simultaneously. **Set all settings to 'Low' and change the max FPS that VALORANT can run on.
+
+<h4>2. Inaccurate reporting results</h4>
+Screenshots are only taken when a **change in frame is reported.** This means that the more you are still in-game (not moving, shooting, etc), the FPS will drop. This doesn't indicate a problem with your computer, just an inaccuracy on the triggerbot's end.
+
+Moreover, shooting opponents will also lower FPS because frames are not recorded when you are shooting. This means that if you are in the range and are constantly shooting bots, the report FPS will drop. Once again, the actual FPS does not drop, but less frames are taken per second because you are constantly shooting.
+
+To know when your results are simply inaccurate or if it is a problem with your computer, hop into a game and just move the camera around sporadically for 30 seconds. Do not stop the camera's movement until you press `alt + p`, and see if the reported FPS matches with your game FPS.
