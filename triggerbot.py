@@ -19,10 +19,10 @@ class Enemy:
         self.body_xcenter = self.head_xcenter
         self.body_ycenter = ymin + self.head_height + (self.body_height / 2)
 
-
     def __str__(self):
         return (f'Head: x: {self.head_xcenter}, y: {self.head_ycenter}, w: {self.head_width}, h: {self.head_height}, '
                 f'Body: x: {self.body_xcenter}, y: {self.body_ycenter}, w: {self.body_width}, h: {self.body_height}')
+
 
 def check_for_yellow(screenshot):
 
@@ -44,7 +44,7 @@ def select():
 
     if select_uses == 0:
         print(f'{Fore.LIGHTYELLOW_EX}[i] Welcome. Press {Fore.LIGHTWHITE_EX}alt + p{Fore.LIGHTYELLOW_EX} '
-              f'to return to this menu once in-game to {Fore.MAGENTA}change gun or check FPS.{Fore.RESET}')
+              f'to return to this menu once in-game to {Fore.LIGHTMAGENTA_EX}change gun or check FPS.{Fore.RESET}')
         print('')
     elif select_uses == 1:
         print(Fore.LIGHTYELLOW_EX)
@@ -95,9 +95,11 @@ def select():
         select_uses += 1
         start = time.perf_counter()
         fps = 0
-
-        win.maximize()
-        (interval, extra_delay, delay) = gun_dict[gun_select]
+        
+        if win is not None and not win.isMaximized:
+            win.maximize()
+        
+        interval, extra_delay, delay = gun_dict[gun_select]
         delay = (1 / delay) + extra_delay
         return
 
@@ -106,7 +108,7 @@ def select():
         return
 
     print(Fore.RED)
-    print('⚠ Not a valid gun.')
+    print('⚠  Not a valid gun.')
     print(Fore.RESET)
     select()
 
@@ -173,13 +175,13 @@ while loop:
                 keyboard.press_and_release('0')
                 time.sleep(delay)
 
-            time.sleep(delay)
+            time.sleep(delay * (interval - 1))
 
         if abs(enemy.body_xcenter - width / 2) < enemy.body_width / 2 and abs(enemy.body_ycenter - height / 2) < enemy.body_height / 2:
             for i in range(interval + 1):
                 keyboard.press_and_release('0')
                 time.sleep(delay)
 
-            time.sleep(delay)
+            time.sleep(delay * interval)
             
 print('Thanks for stopping by!')
