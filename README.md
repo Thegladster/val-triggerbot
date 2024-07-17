@@ -57,13 +57,20 @@ Simply type the gun in **all lowercase** with no extra spaces.
 
 <summary><b>FPS Troubleshooting</b></summary>
 
+<h4></h4>
 
 The reported FPS should be at or around the game's client FPS, which should consequently be at or around your monitor's [**refresh rate.**](https://support.microsoft.com/en-us/windows/change-the-refresh-rate-on-your-monitor-in-windows-c8ea729e-0678-015c-c415-f806f04aae5a)
 
 If your game FPS is significantly higher than the reported FPS from the triggerbot, there can be many different possibilities:
 
 <h4>1. VALORANT is utilizing too many resources</h4>
-If your PC is barely running VALORANT at 120 FPS, then it is almost impossible for it to run the triggerbot simultaneously. **Set all settings to 'Low' and change the max FPS that VALORANT can run on.
+If your PC is barely running VALORANT at 120 FPS, then it would be nearly impossible for it to run the triggerbot at the same time. 
+
+
+To counter this, **set all settings to 'Low' and change the max FPS that VALORANT can run on** to fix this issue. Note that this triggerbot may not work for low-end computers. You can see the bot's CPU usage in 
+[**Task Manager.**](https://www.tomsguide.com/how-to/how-to-open-task-manager-on-windows)
+
+Note that this triggerbot DOES have ~240Hz capabilities, it is just up to the computer that runs it whether or not that mark can be hit.
 
 <h4>2. Inaccurate reporting results</h4>
 Screenshots are only taken when a **change in frame is reported.** This means that the more you are still in-game (not moving, shooting, etc), the FPS will drop. This doesn't indicate a problem with your computer, just an inaccuracy on the triggerbot's end.
