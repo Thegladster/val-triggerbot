@@ -19,6 +19,9 @@ Additionally, keybind the 'Fire' button to the button '0'. If that number is alr
 <h4>3.</h4>
 For faster screen recording, it is **recommended** (but not necessary) to set all settings to low, and to set FPS to a maximum of 120-144 (Generally, this is aligned with the refresh rate of your monitor). Unlimited FPS will greatly drain the bot's resources and memory.
 
+</details>
+<details>
+  
 <summary><b>Usage</b></summary>
 
 <h4>1.</h4>
