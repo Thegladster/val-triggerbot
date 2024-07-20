@@ -14,6 +14,7 @@ A project by [**Thegladster**](https://github.com/Thegladster).
 Make sure enemy color setting is set to deuteranopia.
 
 <h4>2.</h4>
+
 For faster screen recording, it is **highly recommended** (but not necessary) to set all settings to low.
 
 </details>
