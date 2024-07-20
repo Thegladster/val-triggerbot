@@ -14,10 +14,7 @@ A project by [**Thegladster**](https://github.com/Thegladster).
 Make sure enemy color setting is set to deuteranopia.
 
 <h4>2.</h4>
-Additionally, keybind the 'Fire' button to the button '0'. If that number is already in use, edit the keybind in `triggerbot.py`. However, it cannot be just the conventional mouse click (Vanguard prevents it).
-
-<h4>3.</h4>
-For faster screen recording, it is **recommended** (but not necessary) to set all settings to low, and to set FPS to a maximum of 120-144 (Generally, this is aligned with the refresh rate of your monitor). Unlimited FPS will greatly drain the bot's resources and memory.
+For faster screen recording, it is **highly recommended** (but not necessary) to set all settings to low.
 
 </details>
 <details>
