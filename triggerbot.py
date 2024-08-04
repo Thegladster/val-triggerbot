@@ -5,6 +5,7 @@ from colorama import init as colorama_init, Fore
 import numpy as np
 import time
 from PIL import ImageGrab
+from pynput.mouse import Button, Controller
 
 
 class Enemy:
@@ -40,7 +41,7 @@ def check_for_yellow(screenshot):
 
 
 def select():
-    global camera, select_uses, loop, start, fps, delay, interval
+    global camera, select_uses, loop, start, fps, delay, interval, hold, gun_select
 
     if select_uses == 0:
         print(f'{Fore.LIGHTYELLOW_EX}[i] Welcome. Press {Fore.LIGHTWHITE_EX}alt + p{Fore.LIGHTYELLOW_EX} '
@@ -48,10 +49,10 @@ def select():
         print('')
     elif select_uses == 1:
         print(Fore.LIGHTYELLOW_EX)
-        print(f'[i] FPS: {int(fps / (time.perf_counter() - start))}{Fore.RESET}')
-        print(Fore.LIGHTCYAN_EX)
-        print('[?] FPS seem slow (less than 80)? Refer to the GitHub repository: '
-              'https://github.com/Thegladster/val-triggerbot')
+        print(f'[i] FPS: {int(fps / (time.perf_counter() - start))}. ')
+        print(Fore.LIGHTGREEN_EX)
+        print(f'[?] FPS seem slow? Refer to the GitHub repository: '
+              f'{Fore.LIGHTBLUE_EX}https://github.com/Thegladster/val-triggerbot')
     else:
         print(Fore.LIGHTYELLOW_EX)
         print(f'[i] FPS: {int(fps / (time.perf_counter() - start))}{Fore.RESET}')
@@ -67,25 +68,27 @@ def select():
         win = None
 
     gun_dict = {
-        'classic': [2, 0, 6.75],
-        'shorty': [1, 0, 3.33],
-        'frenzy': [3, 0, 10],
-        'ghost': [2, 0, 6.75],
-        'sheriff': [1, 0.1, 4],
-        'stinger': [3, 0, 16],
-        'spectre': [3, 0, 13.33],
-        'bucky': [1, 0, 1.1],
-        'judge': [1, 0, 3.5],
-        'bulldog': [2, 0, 10],
-        'guardian': [2, 0, 5.25],
-        'phantom': [2, 0, 11],
-        'vandal': [2, 0, 9.75],
-        'marshal': [1, 0, 1.5],
-        'outlaw': [1, 0, 2.75],
-        'op': [1, 0, 0.6],
-        'operator': [1, 0, 0.6],
-        'ares':  [3, 0, 13],
-        'odin': [3, 0, 12]
+        'classic': [2, 6.75, False],
+        'shorty': [1, 3.33, False],
+        'frenzy': [3, 10, True],
+        'ghost': [2, 5, False],
+        'sheriff': [1, 2, False],
+        'stinger': [3, 16, True],
+        'spectre': [3, 13.33, True],
+        'bucky': [1, 1.1, False],
+        'judge': [1, 3.5, False],
+        'bulldog': [2, 10, True],
+        'guardian': [1, 5.25, False],
+        'phantom': [2, 11, True],
+        'vandal': [2, 9.75, True],
+        'marshal': [1, 1.5, False],
+        'outlaw': [1, 2.75, False],
+        'op': [1, 0.6, False],
+        'operator': [1, 0.6, False],
+        'ares':  [3, 13, True],
+        'odin': [3, 12, True],
+        'jett': [2, 6, True],
+        'neon': [8, 12, True]
     }
 
     gun_select = input(f'{Fore.LIGHTGREEN_EX}Enter which gun you are using here in \033[4mall lowercase:\033[0m ')
@@ -95,19 +98,16 @@ def select():
         select_uses += 1
         start = time.perf_counter()
         fps = 0
-        
-        if win is not None and not win.isMaximized:
-            win.maximize()
-        
-        interval, extra_delay, delay = gun_dict[gun_select]
-        delay = (1 / delay) + extra_delay
+
+        interval, delay, hold = gun_dict[gun_select]
+        delay = (1 / delay)
         return
 
     elif gun_select == 'exit':
         loop = 0
         return
 
-    print(Fore.RED)
+    print(Fore.yellow)
     print('⚠  Not a valid gun.')
     print(Fore.RESET)
     select()
@@ -121,6 +121,12 @@ fps = 0
 start = time.perf_counter()
 interval = 1
 delay = 0.1
+hold = False
+crosshair_offset = 0
+dist_last = None
+blocked = False
+mouse = Controller()
+gun_select = 'classic'
 
 # Region initialization
 shot = ImageGrab.grab()
@@ -128,7 +134,7 @@ w, h = shot.size
 center = (w / 2, h / 2)
 
 # Change variables depending on the size of the screenshot you want to be taken
-width = 75
+width = 100
 height = 200
 
 # Sets image in the center with given width and height
@@ -136,7 +142,6 @@ left, top, right, bottom = center[0] - width / 2, center[1] - height / 2, center
 left, top, right, bottom = int(left), int(top), int(right), int(bottom)
 region = (left, top, right, bottom)
 print(region)
-
 
 # Select menu (yes, I know the text is clunky but at least it looks cool)
 select()
@@ -171,17 +176,36 @@ while loop:
         enemy = Enemy(min_x, max_x, min_y, max_y)
 
         if abs(enemy.head_xcenter - width / 2) < enemy.head_width / 2 and abs(enemy.head_ycenter - height / 2) < enemy.head_height / 2:
-            for i in range(interval):
-                keyboard.press_and_release('0')
-                time.sleep(delay)
 
-            time.sleep(delay * (interval - 1))
+            if hold:
+                mouse.press(Button.left)
+                time.sleep(delay * (interval - 1) + 0.05)
+                mouse.release(Button.left)
+                time.sleep(delay * interval)
+            else:
+                for i in range(interval):
+                    mouse.press(Button.left)
+                    mouse.release(Button.left)
+                    time.sleep(delay)
 
-        if abs(enemy.body_xcenter - width / 2) < enemy.body_width / 2 and abs(enemy.body_ycenter - height / 2) < enemy.body_height / 2:
-            for i in range(interval + 1):
-                keyboard.press_and_release('0')
-                time.sleep(delay)
+        elif abs(enemy.body_xcenter - width / 2) < enemy.body_width / 2 and abs(enemy.body_ycenter - height / 2) < enemy.body_height / 2:
 
-            time.sleep(delay * interval)
-            
+            if hold:
+                mouse.press(Button.left)
+                time.sleep(delay * interval + 0.05)
+                mouse.release(Button.left)
+                time.sleep(delay * interval)
+            else:
+                if gun_select == 'op' or gun_select == 'operator':
+                    for i in range(interval):
+                        mouse.press(Button.left)
+                        mouse.release(Button.left)
+                        time.sleep(delay)
+                else:
+                    for i in range(interval + 1):
+                        mouse.press(Button.left)
+                        mouse.release(Button.left)
+                        time.sleep(delay)
+
+
 print('Thanks for stopping by!')
