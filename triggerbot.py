@@ -107,7 +107,7 @@ def select():
         loop = 0
         return
 
-    print(Fore.yellow)
+    print(Fore.LIGHTYELLOW_EX)
     print('⚠  Not a valid gun.')
     print(Fore.RESET)
     select()
