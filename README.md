@@ -78,6 +78,7 @@ To counter this, **set all settings to 'Low' and change the max FPS that VALORAN
 Note that this triggerbot DOES have ~240Hz capabilities, it is just up to the computer that runs it whether or not that mark can be hit.
 
 <h4>2. Inaccurate reporting results</h4>
+
 Screenshots are only taken when a **change in frame is reported.** This means that the more you are still in-game (not moving, shooting, etc), the FPS will drop. This doesn't indicate a problem with your computer, just an inaccuracy on the triggerbot's end.
 
 Moreover, shooting opponents will also lower FPS because frames are not recorded when you are shooting. This means that if you are in the range and are constantly shooting bots, the report FPS will drop. Once again, the actual FPS does not drop, but less frames are taken per second because you are constantly shooting.
