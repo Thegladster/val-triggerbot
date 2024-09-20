@@ -18,7 +18,7 @@ Make sure enemy color setting is set to deuteranopia.
 For faster screen recording, it is **highly recommended** (but not necessary) to set all settings to low.
 
 <h4>3.</h4>
-Make sure you keybind the 'shoot' button to the key '0'.
+Make sure you keybind the shoot function to the key `0`.
 
 </details>
 <details>
