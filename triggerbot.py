@@ -28,7 +28,7 @@ class Enemy:
 def check_for_yellow(screenshot):
 
     # Initializing color bounds for yellow
-    lower_yellow = np.array([230, 230, 0])
+    lower_yellow = np.array([200, 200, 0])
     upper_yellow = np.array([255, 255, 100])
 
     yellow = (
@@ -78,9 +78,9 @@ def select():
         'bucky': [1, 1.1, False],
         'judge': [1, 3.5, False],
         'bulldog': [2, 10, True],
-        'guardian': [1, 5.25, False],
-        'phantom': [2, 11, True],
-        'vandal': [2, 9.75, True],
+        'guardian': [1, 3, False],
+        'phantom': [2, 8, True],
+        'vandal': [1, 10, True],
         'marshal': [1, 1.5, False],
         'outlaw': [1, 2.75, False],
         'op': [1, 0.6, False],
@@ -178,33 +178,33 @@ while loop:
         if abs(enemy.head_xcenter - width / 2) < enemy.head_width / 2 and abs(enemy.head_ycenter - height / 2) < enemy.head_height / 2:
 
             if hold:
-                mouse.press(Button.left)
+                keyboard.press('0')
                 time.sleep(delay * (interval - 1) + 0.05)
-                mouse.release(Button.left)
-                time.sleep(delay * interval)
+                keyboard.release('0')
+                time.sleep(delay * interval * 1.5)
             else:
                 for i in range(interval):
-                    mouse.press(Button.left)
-                    mouse.release(Button.left)
+                    keyboard.press('0')
+                    keyboard.release('0')
                     time.sleep(delay)
 
         elif abs(enemy.body_xcenter - width / 2) < enemy.body_width / 2 and abs(enemy.body_ycenter - height / 2) < enemy.body_height / 2:
 
             if hold:
-                mouse.press(Button.left)
+                keyboard.press('0')
                 time.sleep(delay * interval + 0.05)
-                mouse.release(Button.left)
-                time.sleep(delay * interval)
+                keyboard.release('0')
+                time.sleep(delay * interval * 1.5)
             else:
                 if gun_select == 'op' or gun_select == 'operator':
                     for i in range(interval):
-                        mouse.press(Button.left)
-                        mouse.release(Button.left)
+                        keyboard.press('0')
+                        keyboard.release('0')
                         time.sleep(delay)
                 else:
                     for i in range(interval + 1):
-                        mouse.press(Button.left)
-                        mouse.release(Button.left)
+                        keyboard.press('0')
+                        keyboard.release('0')
                         time.sleep(delay)
 
 
