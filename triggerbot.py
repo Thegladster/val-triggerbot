@@ -80,7 +80,7 @@ def select():
         'bulldog': [2, 10, True],
         'guardian': [1, 3, False],
         'phantom': [2, 8, True],
-        'vandal': [1, 10, True],
+        'vandal': [3, 10, True],
         'marshal': [1, 1.5, False],
         'outlaw': [1, 2.75, False],
         'op': [1, 0.6, False],
@@ -178,33 +178,33 @@ while loop:
         if abs(enemy.head_xcenter - width / 2) < enemy.head_width / 2 and abs(enemy.head_ycenter - height / 2) < enemy.head_height / 2:
 
             if hold:
-                keyboard.press('0')
+                mouse.press(Button.left)
                 time.sleep(delay * (interval - 1) + 0.05)
-                keyboard.release('0')
+                mouse.release(Button.left)
                 time.sleep(delay * interval * 1.5)
             else:
                 for i in range(interval):
-                    keyboard.press('0')
-                    keyboard.release('0')
+                    mouse.press(Button.left)
+                    mouse.release(Button.left)
                     time.sleep(delay)
 
         elif abs(enemy.body_xcenter - width / 2) < enemy.body_width / 2 and abs(enemy.body_ycenter - height / 2) < enemy.body_height / 2:
 
             if hold:
-                keyboard.press('0')
+                mouse.press(Button.left)
                 time.sleep(delay * interval + 0.05)
-                keyboard.release('0')
+                mouse.release(Button.left)
                 time.sleep(delay * interval * 1.5)
             else:
                 if gun_select == 'op' or gun_select == 'operator':
                     for i in range(interval):
-                        keyboard.press('0')
-                        keyboard.release('0')
+                        mouse.press(Button.left)
+                        mouse.release(Button.left)
                         time.sleep(delay)
                 else:
                     for i in range(interval + 1):
-                        keyboard.press('0')
-                        keyboard.release('0')
+                        mouse.press(Button.left)
+                        mouse.release(Button.left)
                         time.sleep(delay)
 
 
