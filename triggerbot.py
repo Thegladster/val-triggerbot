@@ -80,7 +80,7 @@ def select():
         'bulldog': [2, 10, True],
         'guardian': [1, 3, False],
         'phantom': [2, 8, True],
-        'vandal': [3, 10, True],
+        'vandal': [2, 10, True],
         'marshal': [1, 1.5, False],
         'outlaw': [1, 2.75, False],
         'op': [1, 0.6, False],
@@ -159,53 +159,56 @@ while loop:
     fps += 1
 
     # Finds all yellow points
-    coordinates = check_for_yellow(frame)
+    if keyboard.is_pressed('a') or keyboard.is_pressed('d'):
+        time.sleep(0.1)
+    else:
+        coordinates = check_for_yellow(frame)
 
-    if len(coordinates) > 0:
-        min_y = np.min(coordinates[:, 0])
-        max_y = np.max(coordinates[:, 0])
+        if len(coordinates) > 0:
+            min_y = np.min(coordinates[:, 0])
+            max_y = np.max(coordinates[:, 0])
 
-        # Creates a subset of points that rest below the head but above the torso
-        subset = coordinates[coordinates[:, 0] < (min_y + 15)]
-        x_values = subset[:, 1]
+            # Creates a subset of points that rest below the head but above the torso
+            subset = coordinates[coordinates[:, 0] < (min_y + 15)]
+            x_values = subset[:, 1]
 
-        # Finds the max and min x of these head values
-        max_x = np.max(x_values)
-        min_x = np.min(x_values)
+            # Finds the max and min x of these head values
+            max_x = np.max(x_values)
+            min_x = np.min(x_values)
 
-        enemy = Enemy(min_x, max_x, min_y, max_y)
+            enemy = Enemy(min_x, max_x, min_y, max_y)
 
-        if abs(enemy.head_xcenter - width / 2) < enemy.head_width / 2 and abs(enemy.head_ycenter - height / 2) < enemy.head_height / 2:
+            if abs(enemy.head_xcenter - width / 2) < enemy.head_width / 2 and abs(enemy.head_ycenter - height / 2) < enemy.head_height / 2:
 
-            if hold:
-                mouse.press(Button.left)
-                time.sleep(delay * (interval - 1) + 0.05)
-                mouse.release(Button.left)
-                time.sleep(delay * interval * 1.5)
-            else:
-                for i in range(interval):
+                if hold:
                     mouse.press(Button.left)
+                    time.sleep(delay * (interval - 1) + 0.05)
                     mouse.release(Button.left)
-                    time.sleep(delay)
-
-        elif abs(enemy.body_xcenter - width / 2) < enemy.body_width / 2 and abs(enemy.body_ycenter - height / 2) < enemy.body_height / 2:
-
-            if hold:
-                mouse.press(Button.left)
-                time.sleep(delay * interval + 0.05)
-                mouse.release(Button.left)
-                time.sleep(delay * interval * 1.5)
-            else:
-                if gun_select == 'op' or gun_select == 'operator':
+                    time.sleep(delay * interval * 1.5)
+                else:
                     for i in range(interval):
                         mouse.press(Button.left)
                         mouse.release(Button.left)
                         time.sleep(delay)
+
+            elif abs(enemy.body_xcenter - width / 2) < enemy.body_width / 2 and abs(enemy.body_ycenter - height / 2) < enemy.body_height / 2:
+
+                if hold:
+                    mouse.press(Button.left)
+                    time.sleep(delay * interval + 0.05)
+                    mouse.release(Button.left)
+                    time.sleep(delay * interval * 1.5)
                 else:
-                    for i in range(interval + 1):
-                        mouse.press(Button.left)
-                        mouse.release(Button.left)
-                        time.sleep(delay)
+                    if gun_select == 'op' or gun_select == 'operator':
+                        for i in range(interval):
+                            mouse.press(Button.left)
+                            mouse.release(Button.left)
+                            time.sleep(delay)
+                    else:
+                        for i in range(interval + 1):
+                            mouse.press(Button.left)
+                            mouse.release(Button.left)
+                            time.sleep(delay)
 
 
 print('Thanks for stopping by!')
