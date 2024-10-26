@@ -19,7 +19,11 @@ For faster screen recording, it is **highly recommended** (but not necessary) to
 
 <h4>3.</h4>
 
-Make sure you keybind the shoot function to the key `0`.
+Make sure you turn off RawInputBuffer in settings.
+
+<h4>IMPORTANT:</h4>
+
+**VALORANT MUST BE OPENED FROM RIOT CLIENT TO RUN PROPERLY! Do not open VALORANT by itself!**
 
 </details>
 <details>
